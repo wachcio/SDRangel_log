@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FT8 SDRangel Log Map</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      .container {
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        width: 95vw;
+      }
+      header {
+        background-color: #1976d2;
+        color: white;
+        padding: 0.5rem;
+        text-align: center;
+        border-radius: 4px 4px 0 0;
+      }
+      label {
+        display: block;
+        margin-top: 1rem;
+        font-weight: bold;
+      }
+      textarea,
+      input[type='text'] {
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 0.2rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      textarea {
+        height: 150px;
+        resize: vertical;
+      }
+      button {
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #1565c0;
+      }
+      #map {
+        height: 70vh;
+        margin-top: 1rem;
+      }
+      #longestQSO {
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>FT8 SDRangel log</header>
+      <div id="map"></div>
+      <label for="baseQTH">QTH bazy</label>
+      <!-- <input type="text" id="baseQTH" value="JO38HG" /> -->
+      <input type="text" id="baseQTH" value="JO93RB" />
+      <label for="log">Log z SDRangel</label>
+      <textarea id="log"></textarea>
+      <button id="updateMap">Aktualizuj mapę</button>
+      <div id="longestQSO"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
