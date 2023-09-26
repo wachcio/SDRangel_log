@@ -55,8 +55,9 @@ document.getElementById('updateMap').addEventListener('click', async () => {
       communication.operatorLat,
       communication.operatorLon,
     ]).addTo(map);
+
     marker.bindPopup(
-      `Operator: <a href="${operatorLink}" target="_blank">${communication.operator}</a><br>Operator QTH: ${communication.operatorQth}<br>Rounded Distance: ${communication.roundedDistance} km`
+      `Operator: <a href="${operatorLink}" target="_blank">${communication.operator}</a><br>Operator QTH: ${communication.operatorQth}<br>Dystans: ${communication.roundedDistance} km<br>Data nasłuchu: ${communication.dateTime},<br>Pasmo: ${communication.band}`
     );
 
     // Tworzenie punktu końcowego dla linii
@@ -79,11 +80,11 @@ document.getElementById('updateMap').addEventListener('click', async () => {
     longestQSO.push(
       `Operator: <a href="${operatorLink}" target="_blank">${
         communication.operator
-      }</a><br>Operator QTH: ${
-        communication.operatorQth
-      }, Dystans: ${distance.toFixed(2)} km, Kraj: ${
+      }</a><br> Dystans: ${distance.toFixed(2)} km, Kraj: ${
         communication.operatorCountry
-      }`
+      }<br>Data nasłuchu: ${communication.dateTime},<br>Operator QTH: ${
+        communication.operatorQth
+      },<br>Pasmo: ${communication.band}`
     );
   });
 
@@ -107,6 +108,75 @@ const parseAndCalculateDistance = async (
   for (const line of lines) {
     if (line.includes('CQ')) {
       const parts = line.split(' ');
+      const dt = parts[0];
+      //format 230926_163700
+      const y = Number(`20${dt[0]}${dt[1]}`);
+      const m = Number(`${dt[2]}${dt[3]}`) - 1;
+      const d = Number(`${dt[4]}${dt[5]}`);
+      const h = Number(`${dt[7]}${dt[8]}`);
+      const mi = Number(`${dt[9]}${dt[10]}`);
+      const s = Number(`${dt[11]}${dt[12]}`);
+      const dateTime = new Date(y, m, d, h, mi, s).toLocaleString('pl-PL');
+      console.log(parts);
+
+      const bandIx = parts.findIndex((element) => element.includes('.'));
+      // console.log(bandIx);
+
+      // let band = Number(parts[4].split('.')[0]);
+      let band = Number(parts[bandIx].split('.')[0]);
+      console.log(band);
+
+      switch (band) {
+        case 1:
+          band = '160m';
+          break;
+        case 3:
+          band = '80m';
+          break;
+        case 5:
+          band = '60m';
+          break;
+        case 7:
+          band = '40m';
+          break;
+        case 10:
+          band = '30m';
+          break;
+        case 14:
+          band = '20m';
+          break;
+        case 18:
+          band = '17m';
+          break;
+        case 21:
+          band = '15m';
+          break;
+        case 24:
+          band = '12m';
+          break;
+        case 28:
+          band = '10m';
+          break;
+        case 50:
+          band = '6m';
+          break;
+        case 70:
+          band = '4m';
+          break;
+        case 144:
+          band = '2m';
+          break;
+        case 222:
+          band = '1.25m';
+          break;
+        case 430:
+          band = '70cm';
+
+          break;
+        default:
+          band = '';
+      }
+
       const cqIndex = parts.indexOf('CQ');
 
       if (cqIndex !== -1 && cqIndex + 2 < parts.length) {
@@ -129,6 +199,8 @@ const parseAndCalculateDistance = async (
               seenOperators.add(operator);
               results.push({
                 operator: operator,
+                dateTime: dateTime,
+                band: band,
                 operatorQth: operatorQth,
                 operatorLat: operatorCoords.lat,
                 operatorLon: operatorCoords.lon,
